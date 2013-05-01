@@ -15,11 +15,6 @@
  */
 
 #define BUILDING_NODE_EXTENSION
-#ifndef MYOBJECT_H
-#define MYOBJECT_H
-
-#include <node.h>
-#include <string>
 
 /** @class Client client.h "xmmsclient/xmmsclient++/client.h"
  *  @brief This class is used to control everything through various
@@ -28,11 +23,11 @@
  *  You can access the subsystems directly from the public data fields
  *  described above.
  */
-class Client 
+class Client : public node::ObjectWrap
 {
 
 	public:
-    static void Init();
+    static void Init(v8::andle<v8::Object> target);
   
   private:
     Client();
@@ -54,45 +49,20 @@ class Client
 		 *                 - Port is only used when the protocol tcp.
 		 *  @throw connection_error If connection fails.
 		 */
-		static v8::Handle<v8::Value> connect(const v8::Arguments& args);
+		static v8::Handle<v8::Value> Connect(const v8::Arguments& args);
 
 		/** Tell the server to quit.
 		 *  This will terminate the server. Destruct this object if you
 		 *  just want to disconnect.
 		 */
-		static v8::Handle<v8::Value> disconnect(const v8::Arguments& args);
-
-		/** Get the current mainloop.
-		 *  If no mainloop is set, it will create a default MainLoop.
-		 *  
-		 *  @return Reference to the current mainloop object.
-		 */
-		static v8::Handle<v8::Value> getMainLoop(const v8::Arguments& args);
-
-		/** Set the mainloop which is to be used.
-		 *  
-		 *  @param ml A mainloop class derived from MainloopInterface.
-		 *
-		 *  @note The parameter @b must be created with <i>new</i>,
-		 *        and it must @b not be destructed at any point.
-		 *        The Client class will take care of its destruction.
-		 */
-		void setMainloop(const v8::Arguments& args);
-
-		/** Set disconnection callback.
-		 *  
-		 *  @param slot A function pointer with function signature void()
-		 */
-		void setDisconnectCallback(const v8::Arguments& args);
+		static v8::Handle<v8::Value> Disconnect(const v8::Arguments& args);
 
 		/** Return the connection status.
 		 */
-		static v8::Handle<v8::Value> isConnected(const v8::Arguments& args);
-
-		/** Return the internal connection pointer.
-		 */
-		static v8::Handle<v8::Value> getConnection(const v8::Arguments& args);
-
+		static v8::Handle<v8::Value> IsConnected(const v8::Arguments& args);
+    
+    
+    static Xmms2::Client _client;
+    
 };
 
-#endif
